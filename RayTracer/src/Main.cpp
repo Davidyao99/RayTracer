@@ -2,10 +2,7 @@
 
 #include <iostream>
 
-int CalculateDaysBetweenDates(
-
 int main() {
-    std::cout << "Hello World!";
-
+    std::cout << "Hello";
     return 0;
 }
