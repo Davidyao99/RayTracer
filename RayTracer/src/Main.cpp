@@ -4,26 +4,35 @@
 #include "../include/vec3.h"
 #include "../include/color.h"
 #include "../include/ray.h"
+#include "../include/sphere.h"
 
 using namespace std;
 
-bool hit_sphere(const ray& r) {
+double hit_sphere(const ray& r, const vec3 sphere_center, const double sphere_radius) {
 
-    vec3 sphere_center = vec3(0, 0, -1);
-    double sphere_radius = 0.5;
     auto a = dot(r.direction(), r.direction());
-    auto b = -2.0 * dot(r.direction(), sphere_center - r.at(0));
+    auto h = dot(r.direction(), sphere_center - r.at(0));
     auto c = dot(sphere_center - r.at(0), sphere_center - r.at(0)) - sphere_radius * sphere_radius;
 
-    auto discriminant = b * b - 4 * a * c;
+    auto discriminant = h * h - 4 * a * c;
 
-    return (discriminant > 0);
+    if (discriminant < 0) {
+		return -1.0;
+	}
+
+    auto t = (-h - sqrt(discriminant)) / a;
+
+    return t;
 }
 
 color ray_color(const ray& r) {
     vec3 unit_ray = unit_vector(r.direction());
     auto t = 0.5 * (unit_ray.y() + 1.0);
     return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
+}
+
+color get_norm_color(const vec3 norm) {
+    return 0.5 * color(norm.x() + 1, norm.y() + 1, norm.z() + 1);
 }
 
 ray get_pixel_ray(const int x, const int y, const int image_width, const int image_height) {
@@ -50,6 +59,9 @@ int main() {
     int image_height = static_cast<int>(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;    // prevent image_height from being 0
 
+    //sphere
+
+    sphere s1 = sphere(vec3(0, 0, -1), 0.5);
 
     // Render
 
@@ -65,12 +77,15 @@ int main() {
 
             auto pixel_color = ray_color(r);
 
-            bool hit = hit_sphere(r);
+            hit_record* rec = new hit_record;
+
+            bool hit = s1.hit(r, -1000, 1000, *rec);
 
             if (hit) {
-				write_color(MyFile, color(255, 0, 0));
+                color sphere_color = get_norm_color(rec->normal);
+                write_color(MyFile, sphere_color);
 			} else {
-				write_color(MyFile, pixel_color);
+                write_color(MyFile, pixel_color);
 			}
 
 //            write_color(MyFile, pixel_color);
