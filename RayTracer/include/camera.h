@@ -115,8 +115,11 @@ private:
         if (world.hit(r, interval(0.001, infinity), rec)) {     // if we hit something, min at 0.001 to prevent float rounding errors
             // return 0.5 * color(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
             // vec3 direction = random_on_hemisphere(rec.normal);
-            vec3 direction = rec.normal + random_unit_vector();
-            return 0.5 * ray_color(ray(rec.p, direction), depth-1, world);
+            ray scattered;
+            color attenuation;
+            if (rec.mat->scatter(r, rec, attenuation, scattered))
+                return attenuation * ray_color(scattered, depth - 1, world);
+            return color(0, 0, 0);
         }
 
         vec3 unit_ray = unit_vector(r.direction());   // if we did not hit anything
