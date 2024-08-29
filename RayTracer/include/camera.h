@@ -15,6 +15,7 @@ public:
     double aspect_ratio = 16.0 / 9.0;
     int image_width = 400;
     int samples_per_pixel = 10;
+    int    max_depth = 50;
     
 
     void render(const hittable& world, ofstream& MyFile) {
@@ -34,9 +35,7 @@ public:
                 write_color(MyFile, pixel_color);
 
 
-                //            write_color(MyFile, pixel_color);
-
-
+                //   write_color(MyFile, pixel_color);
             }
         }
 
@@ -53,7 +52,7 @@ private:
     double pixel_x_size = 0;
     double pixel_y_size = 0;
 
-    int    max_depth = 2;
+    
 
     vec3 top_left_pixel = vec3(0, 0, 0);
 
