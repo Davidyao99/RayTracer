@@ -1,3 +1,4 @@
 Basic Ray Tracer following https://raytracing.github.io/books/RayTracingInOneWeekend.html
 
-![render](https://github.com/user-attachments/assets/e588f4b8-24e1-481e-97b5-a0d94c1d1bc8)
+
+![render](https://github.com/user-attachments/assets/d76c3d59-8c4b-451b-9b93-b3d93fab0598)
